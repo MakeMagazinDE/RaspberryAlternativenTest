@@ -1,0 +1,172 @@
+astroberry@astroberry:~ $ 7z b
+
+7-Zip [32] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=en_US.UTF-8,Utf16=on,HugeFiles=on,32 bits,4 CPUs LE)
+
+LE
+CPU Freq:   795  1263  1490  1497  1495  1498  1496  1497  1496
+
+RAM size:    3649 MB,  # CPU hardware threads:   4
+RAM usage:    882 MB,  # Benchmark threads:      4
+
+                       Compressing  |                  Decompressing
+Dict     Speed Usage    R/U Rating  |      Speed Usage    R/U Rating
+         KiB/s     %   MIPS   MIPS  |      KiB/s     %   MIPS   MIPS
+
+22:       3259   310   1022   3171  |      91973   396   1983   7847
+23:       3484   354   1003   3550  |      89642   396   1960   7756
+24:       3412   360   1019   3670  |      85952   391   1929   7545
+25:       3052   332   1049   3485  |      83551   394   1886   7436
+----------------------------------  | ------------------------------
+Avr:             339   1023   3469  |              394   1940   7646
+Tot:             367   1481   5558
+astroberry@astroberry:~ $
+
+
+
+astroberry@astroberry:~/tinymembench $ ./tinymembench
+tinymembench v0.4.9 (simple benchmark for memory throughput and latency)
+
+==========================================================================
+== Memory bandwidth tests                                               ==
+==                                                                      ==
+== Note 1: 1MB = 1000000 bytes                                          ==
+== Note 2: Results for 'copy' tests show how many bytes can be          ==
+==         copied per second (adding together read and writen           ==
+==         bytes would have provided twice higher numbers)              ==
+== Note 3: 2-pass copy means that we are using a small temporary buffer ==
+==         to first fetch data into it, and only then write it to the   ==
+==         destination (source -> L1 cache, L1 cache -> destination)    ==
+== Note 4: If sample standard deviation exceeds 0.1%, it is shown in    ==
+==         brackets                                                     ==
+==========================================================================
+
+ C copy backwards                                     :    977.5 MB/s (2.9%)
+ C copy backwards (32 byte blocks)                    :    888.1 MB/s (0.2%)
+ C copy backwards (64 byte blocks)                    :    891.5 MB/s (0.2%)
+ C copy                                               :   2658.0 MB/s
+ C copy prefetched (32 bytes step)                    :   1071.7 MB/s (0.6%)
+ C copy prefetched (64 bytes step)                    :   1072.6 MB/s (0.2%)
+ C 2-pass copy                                        :   2191.4 MB/s (0.1%)
+ C 2-pass copy prefetched (32 bytes step)             :   1071.9 MB/s (0.2%)
+ C 2-pass copy prefetched (64 bytes step)             :   1071.3 MB/s (0.3%)
+ C fill                                               :   3281.4 MB/s
+ C fill (shuffle within 16 byte blocks)               :   3279.4 MB/s
+ C fill (shuffle within 32 byte blocks)               :   3279.2 MB/s
+ C fill (shuffle within 64 byte blocks)               :   3280.1 MB/s
+ ---
+ standard memcpy                                      :   2652.8 MB/s (0.4%)
+ standard memset                                      :   3281.3 MB/s
+ ---
+ NEON read                                            :   4179.3 MB/s (0.3%)
+ NEON read prefetched (32 bytes step)                 :   4223.6 MB/s (0.3%)
+ NEON read prefetched (64 bytes step)                 :   4219.4 MB/s (0.3%)
+ NEON read 2 data streams                             :   3885.8 MB/s (0.3%)
+ NEON read 2 data streams prefetched (32 bytes step)  :   3894.9 MB/s (0.3%)
+ NEON read 2 data streams prefetched (64 bytes step)  :   3888.7 MB/s (0.5%)
+ NEON copy                                            :   2660.8 MB/s
+ NEON copy prefetched (32 bytes step)                 :   2655.6 MB/s (0.3%)
+ NEON copy prefetched (64 bytes step)                 :   2655.1 MB/s
+ NEON unrolled copy                                   :   2651.4 MB/s (1.3%)
+ NEON unrolled copy prefetched (32 bytes step)        :   2676.9 MB/s (0.9%)
+ NEON unrolled copy prefetched (64 bytes step)        :   2679.5 MB/s (0.2%)
+ NEON copy backwards                                  :   2707.3 MB/s (0.2%)
+ NEON copy backwards prefetched (32 bytes step)       :   2708.0 MB/s (0.4%)
+ NEON copy backwards prefetched (64 bytes step)       :   2708.4 MB/s (0.3%)
+ NEON 2-pass copy                                     :   2237.9 MB/s
+ NEON 2-pass copy prefetched (32 bytes step)          :   2289.5 MB/s
+ NEON 2-pass copy prefetched (64 bytes step)          :   2307.4 MB/s
+ NEON unrolled 2-pass copy                            :   2207.4 MB/s (0.1%)
+ NEON unrolled 2-pass copy prefetched (32 bytes step) :   2289.3 MB/s (0.2%)
+ NEON unrolled 2-pass copy prefetched (64 bytes step) :   2305.8 MB/s (0.1%)
+ NEON fill                                            :   3278.3 MB/s
+ NEON fill backwards                                  :   3279.5 MB/s
+ VFP copy                                             :   2648.8 MB/s (0.2%)
+ VFP 2-pass copy                                      :   2134.3 MB/s (0.2%)
+ ARM fill (STRD)                                      :   3278.9 MB/s
+ ARM fill (STM with 8 registers)                      :   3278.6 MB/s
+ ARM fill (STM with 4 registers)                      :   3278.8 MB/s
+ ARM copy prefetched (incr pld)                       :   2666.3 MB/s (0.2%)
+ ARM copy prefetched (wrap pld)                       :   2650.7 MB/s (0.3%)
+ ARM 2-pass copy prefetched (incr pld)                :   2333.3 MB/s (0.3%)
+ ARM 2-pass copy prefetched (wrap pld)                :   2231.7 MB/s
+
+==========================================================================
+== Framebuffer read tests.                                              ==
+==                                                                      ==
+== Many ARM devices use a part of the system memory as the framebuffer, ==
+== typically mapped as uncached but with write-combining enabled.       ==
+== Writes to such framebuffers are quite fast, but reads are much       ==
+== slower and very sensitive to the alignment and the selection of      ==
+== CPU instructions which are used for accessing memory.                ==
+==                                                                      ==
+== Many x86 systems allocate the framebuffer in the GPU memory,         ==
+== accessible for the CPU via a relatively slow PCI-E bus. Moreover,    ==
+== PCI-E is asymmetric and handles reads a lot worse than writes.       ==
+==                                                                      ==
+== If uncached framebuffer reads are reasonably fast (at least 100 MB/s ==
+== or preferably >300 MB/s), then using the shadow framebuffer layer    ==
+== is not necessary in Xorg DDX drivers, resulting in a nice overall    ==
+== performance improvement. For example, the xf86-video-fbturbo DDX     ==
+== uses this trick.                                                     ==
+==========================================================================
+
+ NEON read (from framebuffer)                         :   1312.1 MB/s
+ NEON copy (from framebuffer)                         :    734.7 MB/s
+ NEON 2-pass copy (from framebuffer)                  :    696.6 MB/s
+ NEON unrolled copy (from framebuffer)                :    599.5 MB/s
+ NEON 2-pass unrolled copy (from framebuffer)         :    601.3 MB/s
+ VFP copy (from framebuffer)                          :    770.4 MB/s
+ VFP 2-pass copy (from framebuffer)                   :    643.8 MB/s
+ ARM copy (from framebuffer)                          :    719.9 MB/s
+ ARM 2-pass copy (from framebuffer)                   :    688.5 MB/s
+
+==========================================================================
+== Memory latency test                                                  ==
+==                                                                      ==
+== Average time is measured for random memory accesses in the buffers   ==
+== of different sizes. The larger is the buffer, the more significant   ==
+== are relative contributions of TLB, L1/L2 cache misses and SDRAM      ==
+== accesses. For extremely large buffer sizes we are expecting to see   ==
+== page table walk with several requests to SDRAM for almost every      ==
+== memory access (though 64MiB is not nearly large enough to experience ==
+== this effect to its fullest).                                         ==
+==                                                                      ==
+== Note 1: All the numbers are representing extra time, which needs to  ==
+==         be added to L1 cache latency. The cycle timings for L1 cache ==
+==         latency can be usually found in the processor documentation. ==
+== Note 2: Dual random read means that we are simultaneously performing ==
+==         two independent memory accesses at a time. In the case if    ==
+==         the memory subsystem can't handle multiple outstanding       ==
+==         requests, dual random read has the same timings as two       ==
+==         single reads performed one after another.                    ==
+==========================================================================
+
+block size : single random read / dual random read
+      1024 :    0.0 ns          /     0.0 ns
+      2048 :    0.0 ns          /     0.0 ns
+      4096 :    0.0 ns          /     0.0 ns
+      8192 :    0.0 ns          /     0.0 ns
+     16384 :    0.0 ns          /     0.0 ns
+     32768 :    0.0 ns          /     0.0 ns
+     65536 :    5.7 ns          /     8.9 ns
+    131072 :    8.6 ns          /    11.9 ns
+    262144 :   12.3 ns          /    15.8 ns
+    524288 :   14.2 ns          /    18.1 ns
+   1048576 :   25.7 ns          /    38.3 ns
+   2097152 :   83.0 ns          /   120.2 ns
+   4194304 :  110.7 ns          /   143.4 ns
+   8388608 :  132.4 ns          /   164.6 ns
+  16777216 :  143.4 ns          /   174.8 ns
+  33554432 :  149.2 ns          /   180.6 ns
+  67108864 :  162.0 ns          /   199.0 ns
+astroberry@astroberry:~/tinymembench $
+
+
+
+
+astroberry@astroberry:~ $ sudo hdparm -t /dev/mmcblk0p2 | grep Timing
+[sudo] password for astroberry:
+ HDIO_DRIVE_CMD(identify) failed: Invalid argument
+ Timing buffered disk reads: 126 MB in  3.03 seconds =  41.53 MB/sec
+astroberry@astroberry:~ $
