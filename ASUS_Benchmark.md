@@ -1,3 +1,4 @@
+'''
 linaro@ASUS-Tinker:~/gpio_lib_python/test$  7z b
 
 7-Zip [32] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
@@ -213,3 +214,4 @@ linaro@ASUS-Tinker:~$ sudo hdparm -Tv /dev/mmcblk1p8
  geometry      = 471359/4/16, sectors = 30167007, start = 368640
  Timing cached reads:   1690 MB in  2.00 seconds = 845.50 MB/sec
 linaro@ASUS-Tinker:~$
+'''
