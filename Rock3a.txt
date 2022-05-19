@@ -1,0 +1,124 @@
+rock@rock-3a:~$ 7z b
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=C,Utf16=off,HugeFiles=on,64 bits,4 CPUs LE)
+
+LE
+CPU Freq:  1503  1687  1893  1999  1999  2002  2000  2002  2003
+
+RAM size:    1474 MB,  # CPU hardware threads:   4
+RAM usage:    882 MB,  # Benchmark threads:      4
+
+                       Compressing  |                  Decompressing
+Dict     Speed Usage    R/U Rating  |      Speed Usage    R/U Rating
+         KiB/s     %   MIPS   MIPS  |      KiB/s     %   MIPS   MIPS
+
+22:       1691   377    436   1645  |      76616   396   1651   6537
+23:       1602   379    431   1633  |      73104   398   1589   6325
+24:       1511   386    421   1625  |      68995   397   1524   6057
+25:       1417   392    413   1619  |      64830   397   1453   5770
+----------------------------------  | ------------------------------
+Avr:             383    425   1630  |              397   1554   6172
+Tot:             390    990   3901
+rock@rock-3a:~$
+
+
+rock@rock-3a:~/tinymembench$ ./tinymembench
+tinymembench v0.4.9 (simple benchmark for memory throughput and latency)
+
+==========================================================================
+== Memory bandwidth tests                                               ==
+==                                                                      ==
+== Note 1: 1MB = 1000000 bytes                                          ==
+== Note 2: Results for 'copy' tests show how many bytes can be          ==
+==         copied per second (adding together read and writen           ==
+==         bytes would have provided twice higher numbers)              ==
+== Note 3: 2-pass copy means that we are using a small temporary buffer ==
+==         to first fetch data into it, and only then write it to the   ==
+==         destination (source -> L1 cache, L1 cache -> destination)    ==
+== Note 4: If sample standard deviation exceeds 0.1%, it is shown in    ==
+==         brackets                                                     ==
+==========================================================================
+
+ C copy backwards                                     :   1945.9 MB/s (0.6%)
+ C copy backwards (32 byte blocks)                    :   1938.3 MB/s
+ C copy backwards (64 byte blocks)                    :   1480.9 MB/s (0.4%)
+ C copy                                               :   2891.2 MB/s
+ C copy prefetched (32 bytes step)                    :   1672.8 MB/s (0.3%)
+ C copy prefetched (64 bytes step)                    :   2289.3 MB/s (0.2%)
+ C 2-pass copy                                        :   1675.1 MB/s (0.1%)
+ C 2-pass copy prefetched (32 bytes step)             :   1075.3 MB/s
+ C 2-pass copy prefetched (64 bytes step)             :   1550.0 MB/s
+ C fill                                               :   7579.9 MB/s (0.5%)
+ C fill (shuffle within 16 byte blocks)               :   7581.7 MB/s (0.2%)
+ C fill (shuffle within 32 byte blocks)               :   7587.7 MB/s (0.2%)
+ C fill (shuffle within 64 byte blocks)               :   7578.4 MB/s (0.3%)
+ ---
+ standard memcpy                                      :   2885.4 MB/s
+ standard memset                                      :   7576.9 MB/s (0.7%)
+ ---
+ NEON LDP/STP copy                                    :   2884.8 MB/s
+ NEON LDP/STP copy pldl2strm (32 bytes step)          :   2281.9 MB/s
+ NEON LDP/STP copy pldl2strm (64 bytes step)          :   2748.3 MB/s
+ NEON LDP/STP copy pldl1keep (32 bytes step)          :   2163.8 MB/s (0.1%)
+ NEON LDP/STP copy pldl1keep (64 bytes step)          :   2921.4 MB/s
+ NEON LD1/ST1 copy                                    :   2885.8 MB/s (0.2%)
+ NEON STP fill                                        :   7584.5 MB/s (0.3%)
+ NEON STNP fill                                       :   1965.9 MB/s (2.1%)
+ ARM LDP/STP copy                                     :   2888.2 MB/s (0.1%)
+ ARM STP fill                                         :   7589.9 MB/s (0.3%)
+ ARM STNP fill                                        :   1947.1 MB/s (2.1%)
+
+==========================================================================
+== Memory latency test                                                  ==
+==                                                                      ==
+== Average time is measured for random memory accesses in the buffers   ==
+== of different sizes. The larger is the buffer, the more significant   ==
+== are relative contributions of TLB, L1/L2 cache misses and SDRAM      ==
+== accesses. For extremely large buffer sizes we are expecting to see   ==
+== page table walk with several requests to SDRAM for almost every      ==
+== memory access (though 64MiB is not nearly large enough to experience ==
+== this effect to its fullest).                                         ==
+==                                                                      ==
+== Note 1: All the numbers are representing extra time, which needs to  ==
+==         be added to L1 cache latency. The cycle timings for L1 cache ==
+==         latency can be usually found in the processor documentation. ==
+== Note 2: Dual random read means that we are simultaneously performing ==
+==         two independent memory accesses at a time. In the case if    ==
+==         the memory subsystem can't handle multiple outstanding       ==
+==         requests, dual random read has the same timings as two       ==
+==         single reads performed one after another.                    ==
+==========================================================================
+
+block size : single random read / dual random read
+      1024 :    0.0 ns          /     0.0 ns
+      2048 :    0.0 ns          /     0.0 ns
+      4096 :    0.0 ns          /     0.0 ns
+      8192 :    0.0 ns          /     0.0 ns
+     16384 :    0.8 ns          /     1.3 ns
+     32768 :    3.7 ns          /     6.1 ns
+     65536 :    9.4 ns          /    13.3 ns
+    131072 :   12.2 ns          /    16.1 ns
+    262144 :   14.6 ns          /    17.4 ns
+    524288 :   19.9 ns          /    23.4 ns
+   1048576 :  204.3 ns          /   309.7 ns
+   2097152 :  286.0 ns          /   390.6 ns
+   4194304 :  328.7 ns          /   413.9 ns
+   8388608 :  356.7 ns          /   441.4 ns
+  16777216 :  376.2 ns          /   458.7 ns
+  33554432 :  391.3 ns          /   461.9 ns
+  67108864 :  401.8 ns          /   462.6 ns
+rock@rock-3a:~/tinymembench$
+
+
+
+
+
+
+
+
+rock@rock-3a:~$ sudo hdparm -t /dev/mmcblk1p2 | grep Timing
+ HDIO_DRIVE_CMD(identify) failed: Invalid argument
+ Timing buffered disk reads: 198 MB in  3.01 seconds =  65.75 MB/sec
+rock@rock-3a:~$
+
